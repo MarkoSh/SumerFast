@@ -330,6 +330,28 @@ rep("""document.fonts?.load('500 100px "Noto Sans Thai Looped"', 'กอ๑')"""
 rep("const normTh = s => s.replace(/[\\s.,!?ๆ]/g, '').replace(/ครับ|ค่ะ|คะ|นะ/g, '');", "const normTh = s => s.toLowerCase().replace(/[^a-z]/g, '');")
 rep("console.assert(simil('สวัสดีครับ', 'สวัสดี') === 1 && simil('ขอบคุณ', 'สวัสดี') < .5, 'simil');", "")
 
+# trace: cuneiform is impressed, not drawn — each stroke becomes a wedge (head where you press, tail towards release)
+func('trInk', r"""
+function trInk(ctx, color, width) {
+  const b = trSz().brush, grow = Math.max(0, width - b);       // grow > 0: dilated copy used for scoring tolerance
+  const W = b * 2.4, H = b * 2.2, TW = Math.max(1.2, b * .4);  // head width, head length, tail width
+  ctx.strokeStyle = ctx.fillStyle = color; ctx.lineCap = ctx.lineJoin = 'round';
+  for (const st of tr.strokes) {
+    const [sx, sy] = st[0], [ex, ey] = st[st.length - 1];
+    let dx = ex - sx, dy = ey - sy, len = Math.hypot(dx, dy);
+    if (len < H * .6) { dx = -1; dy = 0; len = 0 } else { dx /= len; dy /= len }  // a tap = Winkelhaken pointing left (𒌋)
+    const px = -dy, py = dx;
+    ctx.beginPath();
+    ctx.moveTo(sx + px * W / 2, sy + py * W / 2); ctx.lineTo(sx - px * W / 2, sy - py * W / 2); ctx.lineTo(sx + dx * H, sy + dy * H); ctx.closePath();
+    ctx.fill();
+    if (grow) { ctx.lineWidth = grow; ctx.stroke() }
+    if (len > H) {
+      ctx.lineWidth = TW + grow;
+      ctx.beginPath(); ctx.moveTo(sx + dx * H * .7, sy + dy * H * .7); ctx.lineTo(ex, ey); ctx.stroke();
+    }
+  }
+}""")
+
 for bad in ['CONS', 'thaiNum', 'thaiDigits', 'VOWELS32', 'TONEMARKS', 'VSAY', 'PRONOUN', 'INI[', 'FIN[', 'TONES[', 'orderPhrase(', 'ปวด', 'ไ', 'ก', 'ครับ']:
     if bad in s:
         print('LEFTOVER', bad, [s[m.start() - 40:m.start() + 40] for m in re.finditer(re.escape(bad), s)][:2])
