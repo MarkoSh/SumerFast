@@ -266,6 +266,50 @@ for k in AUDIO[NARR]:
     c, bad = cuneiform(k)
     if c and not bad: KB_CUN[k] = c
 js.append(f'const KB_CUN = {json.dumps(KB_CUN, ensure_ascii=False)};')
+
+# EME: a cuneiform keyboard layout made up for this project (no standard one exists).
+# Consonant on the key, vowel by modifier: plain a, Shift u, AltGr i, AltGr+Shift e.
+EME_LAT = ['`1234567890-=\\', 'qwertyuiop[]', "asdfghjkl;'", 'zxcvbnm,./']
+EME_VOW = ['a', 'u', 'i', 'e']
+EME_CONS = {'b': 'b', 'd': 'd', 'g': 'g', 'j': 'ĝ', 'h': 'ḫ', 'k': 'k', 'l': 'l', 'm': 'm', 'n': 'n', 'p': 'p', 'r': 'r', 's': 's', 'c': 'š', 't': 't', 'z': 'z'}
+EME_VC = {'[': 'n', ']': 'm', ';': 'r', "'": 'š', ',': 'b', '.': 'l', '/': 'k', '\\': 'd'}    # vowel + consonant
+EME_WORDS = {'`': ['ĝiš', 'lu₂'], 'q': ['lugal', 'dumu', 'ama', 'nin'], 'w': ['e₂', 'uru', 'kur'],
+             'y': ['dub', 'eme', 'nam', 'inana'], 'f': ['ninda', 'gud'], 'v': ['sila₃', 'gur', 'ma₂', 'sar'],
+             'o': ['du₃', 'šum₂', 'gu₇', 'naĝ'], 'a': ['a'], 'u': ['u'], 'i': ['i'], 'e': ['e']}
+SUBD = '₀₁₂₃₄₅₆₇₈₉'
+def eme_value(v):
+    """the lowest-numbered reading of v that is one sign: v, v₂, v₃ …"""
+    for n in range(1, 30):
+        r = v if n == 1 else v + ''.join(SUBD[int(d)] for d in str(n))
+        u = sign_of(r)
+        if u and len(u) == 1: return r, u
+    return None, ''
+EME_READ, EME_MISS, EME_AT = {}, [], {}
+def eme_vals(ch):
+    if ch in EME_CONS: return [EME_CONS[ch] + v for v in EME_VOW]
+    if ch in EME_VC: return [v + EME_VC[ch] for v in EME_VOW]
+    return (EME_WORDS.get(ch, []) + ['', '', '', ''])[:4]
+# a sign has many readings: the key label and the reading under a typed sign come from the first placement,
+# so plain syllables go first (b before p, m before ĝ: they share signs), then vowel+consonant, then words
+ORDER = 'aiuebdgklmnrsczhpj' + ''.join(EME_VC) + ''.join(EME_WORDS)
+KEYS = {ch: ['', '', '', ''] for lat in EME_LAT for ch in lat}
+for ch in sorted(KEYS, key=lambda c: ORDER.index(c) if c in ORDER else 99):
+    if ch.isdigit():
+        n = int(ch) or 10
+        KEYS[ch] = [num_sign(n), num_sign(n * 10) if 2 <= n <= 5 else '', '', '']
+        for v, r in zip(KEYS[ch][:2], [n, n * 10]):
+            if v: EME_READ.setdefault(v, str(r))
+        continue
+    for m, v in enumerate(eme_vals(ch)):
+        if not v: continue
+        r, u = eme_value(v)
+        if not u: EME_MISS.append(v); continue
+        if EME_AT.setdefault(u, ch) != ch: continue      # the sign already sits on another key
+        EME_READ.setdefault(u, r); KEYS[ch][m] = u
+eme_rows = [[lat] + [[KEYS[ch][m] for ch in lat] for m in range(4)] for lat in EME_LAT]
+EME_EX = [KB_CUN[w] for w in ['lugal', 'e₂', 'ki-en-gi', 'dub-sar', 'dumu', 'nin', 'šu', 'a-ba-a'] if w in KB_CUN and all(c in EME_READ for c in KB_CUN[w])]
+if EME_MISS: print('EME: no single sign for', EME_MISS)
+js.append(f'const KB_EME = {json.dumps({"rows": eme_rows, "read": EME_READ, "ex": EME_EX}, ensure_ascii=False)};')
 js.append('// audio keys -> reconstructed reading (for tools/texts.js)')
 js.append(f'const AUDIO = {json.dumps(AUDIO, ensure_ascii=False)};')
 open('data.js', 'w', encoding='utf8').write('\n'.join(js) + '\n')
