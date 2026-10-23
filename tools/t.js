@@ -2,6 +2,7 @@
 const T = {
   ru: {
     navSounds: 'Звуки', navTones: 'Чтение', navAlpha: 'Клинопись', navPhrases: 'Таблички', navWords: 'Слова', navGram: 'Грамматика', navDialogs: 'Читаем', navEtq: 'Мир шумеров', navTrain: 'Тренажёры', navTop: 'Топ-глаголы',
+    moreTitle: 'Другие курсы', moreSub: 'Тот же формат и те же тренажёры — другой язык.',
     male: '', female: '',
     badge: 'Первый записанный язык человечества',
     heroTitle: 'Шумерский. Язык первых табличек.',
@@ -89,6 +90,7 @@ const T = {
   },
   en: {
     navSounds: 'Sounds', navTones: 'Reading', navAlpha: 'Cuneiform', navPhrases: 'Tablets', navWords: 'Words', navGram: 'Grammar', navDialogs: 'Read', navEtq: 'Sumerian world', navTrain: 'Practice', navTop: 'Top verbs',
+    moreTitle: 'More courses', moreSub: 'Same format, same drills — another language.',
     male: '', female: '',
     badge: 'Humanity’s first written language',
     heroTitle: 'Sumerian. The language of the first tablets.',

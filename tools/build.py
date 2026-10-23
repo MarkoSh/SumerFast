@@ -330,6 +330,8 @@ rep("""document.fonts?.load('500 100px "Noto Sans Thai Looped"', 'กอ๑')"""
 rep("const normTh = s => s.replace(/[\\s.,!?ๆ]/g, '').replace(/ครับ|ค่ะ|คะ|นะ/g, '');", "const normTh = s => s.toLowerCase().replace(/[^a-z]/g, '');")
 rep("console.assert(simil('สวัสดีครับ', 'สวัสดี') === 1 && simil('ขอบคุณ', 'สวัสดี') < .5, 'simil');", "")
 
+rep("const SITE = 'thai';", "const SITE = 'sumer';")
+
 # trace: cuneiform is impressed, not drawn — each stroke becomes a wedge (head where you press, tail towards release)
 func('trInk', r"""
 function trInk(ctx, color, width) {
