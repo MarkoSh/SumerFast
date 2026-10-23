@@ -78,7 +78,7 @@ const KB_SETS = [{
 
 # tappable words in tips: transliteration that has audio (in English text only words with a Sumerian marker)
 assert s.count('const SAY_RUN = ') == 1
-s = re.sub(r'^const SAY_RUN = .*$', lambda m: "const SAY_RUN = /[-{]*[a-zšĝḫŋ][a-zšĝḫŋ₀-₉ₓ{}-]*/g, SAY_HAS = /[a-zšĝḫŋ]/, SAY_OTHER = /\\s/, SAY_OK = m => AUDIO[gender][m] && (lang === 'ru' || /[-šĝḫŋ₀-₉{}]/.test(m));", s, flags=re.M)
+s = re.sub(r'^const SAY_RUN = .*$', lambda m: "const SAY_RUN = /(?<![A-Za-z0-9])[-{]*[a-zšĝḫŋ][a-zšĝḫŋ₀-₉ₓ{}-]*(?![A-Za-z0-9])/g, SAY_HAS = /[a-zšĝḫŋ]/, SAY_OTHER = /\\s/, SAY_OK = m => AUDIO[gender][m] && (lang === 'ru' || /[-šĝḫŋ₀-₉{}]/.test(m));", s, flags=re.M)
 rep('// Thai words inside notes and tips become tappable: only text that mixes Thai with Latin/Cyrillic,', '// Sumerian words inside notes and tips become tappable (only those with audio),')
 
 # ---------- static html ----------

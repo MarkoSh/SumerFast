@@ -241,6 +241,16 @@ out['TR_NUM'] = [{'g': x['th'], 'say': x['say'], 'lat': x['lat'], 'ru': x['ru'],
 
 audio('lugal-e e₂ ḫe₂-en-du₃', 'lugal-e e₂ ḫe₂-en-du₃')
 
+# ---------- tongue-twister block: no Sumerian tongue twisters survive, so the TU-TA-TI school drill stands in ----------
+out['TWISTERS'] = [
+    dict(item('tu ta ti tu-ta-ti'), ru='Строка 1 школьного упражнения TU-TA-TI', en='Line 1 of the TU-TA-TI school drill',
+         tip=['Три слога по отдельности, потом они же слитно, как одно «слово». Ученик проговаривал строку вслух и писал её снова и снова.',
+              'Three syllables one by one, then together as one “word”. Pupils said the line aloud and wrote it again and again.']),
+    dict(item('nu na ni nu-na-ni'), ru='Строка 2: та же схема с согласной n', en='Line 2: the same pattern with n',
+         tip=['Дальше упражнение шло так же по другим согласным. Так тренировали и письмо, и произношение слогов.',
+              'The drill went on the same way through other consonants, training both writing and pronunciation.']),
+]
+
 # ---------- transliteration inside Russian tips and notes: tappable on the page ----------
 TOKEN = r'[-{]*[a-zšĝḫŋ][a-zšĝḫŋ₀-₉ₓ{}-]*'
 def ru_strings(v):
