@@ -35,6 +35,11 @@ j = s.index('</div>', i) + len('</div>\n')
 s = s[:i] + s[j:]
 s = s.replace('ThaiFast', 'SumerFast')
 
+# tappable words in tips: transliteration that has audio (in English text only words with a Sumerian marker)
+assert s.count('const SAY_RUN = ') == 1
+s = re.sub(r'^const SAY_RUN = .*$', lambda m: "const SAY_RUN = /[-{]*[a-zšĝḫŋ][a-zšĝḫŋ₀-₉ₓ{}-]*/g, SAY_HAS = /[a-zšĝḫŋ]/, SAY_OTHER = /\\s/, SAY_OK = m => AUDIO[gender][m] && (lang === 'ru' || /[-šĝḫŋ₀-₉{}]/.test(m));", s, flags=re.M)
+rep('// Thai words inside notes and tips become tappable: only text that mixes Thai with Latin/Cyrillic,', '// Sumerian words inside notes and tips become tappable (only those with audio),')
+
 # ---------- static html ----------
 rep('<dt class="text-2xl font-bold text-white">44</dt>', '<dt class="text-2xl font-bold text-white">58</dt>')
 rep('<p class="mt-2 font-thai text-3xl text-white">ไม้ใหม่ไม่ไหม้ไหม</p>', '<p id="famTh" class="mt-2 font-thai text-3xl text-white leading-relaxed"></p>')
