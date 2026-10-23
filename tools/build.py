@@ -35,6 +35,27 @@ j = s.index('</div>', i) + len('</div>\n')
 s = s[:i] + s[j:]
 s = s.replace('ThaiFast', 'SumerFast')
 
+# keyboard block: ATF conventions instead of a national layout; cuneiform shown for words the course knows
+between('// Kedmanee, the standard Thai layout.', 'const KB_CODE =', r"""// No cuneiform layout exists: transliteration is typed in Latin letters with ATF conventions (ORACC, ETCSL)
+const KB_ROWS = [
+  ['`1234567890-=', '`1234567890-=', '~!@#$%^&*()_+'],
+  ['qwertyuiop[]\\', 'qwertyuiop[]\\', 'QWERTYUIOP{}|'],
+  ["asdfghjkl;'", "asdfghjkl;'", 'ASDFGHJKL:"'],
+  ['zxcvbnm,./', 'zxcvbnm,./', 'ZXCVBNM<>?'],
+];
+const KB_HINT = { s: 'š', j: 'ĝ', h: 'ḫ', ',': 'ṣ ṭ', 0: '₀', 1: '₁', 2: '₂', 3: '₃', 4: '₄', 5: '₅', 6: '₆', 7: '₇', 8: '₈', 9: '₉' };
+const KB_EX = ['lugal', 'ĝiš', 'šu', 'dub-sar', 'e₂', 'diĝir'];
+const KB_ACC = { 'á': 'a2', 'é': 'e2', 'í': 'i2', 'ú': 'u2', 'à': 'a3', 'è': 'e3', 'ì': 'i3', 'ù': 'u3' };
+const kbConv = s => s.replace(/sz/g, 'š').replace(/S[zZ]/g, 'Š').replace(/s,/g, 'ṣ').replace(/S,/g, 'Ṣ').replace(/t,/g, 'ṭ').replace(/T,/g, 'Ṭ')
+  .replace(/j/g, 'ĝ').replace(/J/g, 'Ĝ').replace(/h/g, 'ḫ').replace(/H/g, 'Ḫ')
+  .replace(/([a-zA-ZšĝḫṣṭŠĜḪṢṬ₀-₉])([0-9])/g, (m, a, d) => a + '₀₁₂₃₄₅₆₇₈₉'[d]).replace(/([₀-₉])([0-9])/g, (m, a, d) => a + '₀₁₂₃₄₅₆₇₈₉'[d]);
+const kbKeys = s => s.replace(/[áéíúàèìù]/g, c => KB_ACC[c]).replace(/š/g, 'sz').replace(/Š/g, 'SZ').replace(/ṣ/g, 's,').replace(/Ṣ/g, 'S,').replace(/ṭ/g, 't,').replace(/Ṭ/g, 'T,')
+  .replace(/[ĝŋ]/g, 'j').replace(/[ĜŊ]/g, 'J').replace(/ḫ/g, 'h').replace(/Ḫ/g, 'H').replace(/[₀-₉]/g, c => '₀₁₂₃₄₅₆₇₈₉'.indexOf(c));
+// KB_CUN (transliteration -> cuneiform) comes from gen.py
+const kbOut = v => { const c = KB_CUN[v]; return c ? `<p class="mt-5 font-thai text-5xl text-white">${esc(c)}</p>` : '' };
+""")
+rep("$('#kbSay').dataset.say = v.trim(); $('#kbSay').classList.toggle('invisible', !v.trim());", "$('#kbSay').dataset.say = v.trim(); $('#kbSay').classList.toggle('invisible', !AUDIO[gender][v.trim()]);")
+
 # tappable words in tips: transliteration that has audio (in English text only words with a Sumerian marker)
 assert s.count('const SAY_RUN = ') == 1
 s = re.sub(r'^const SAY_RUN = .*$', lambda m: "const SAY_RUN = /[-{]*[a-zšĝḫŋ][a-zšĝḫŋ₀-₉ₓ{}-]*/g, SAY_HAS = /[a-zšĝḫŋ]/, SAY_OTHER = /\\s/, SAY_OK = m => AUDIO[gender][m] && (lang === 'ru' || /[-šĝḫŋ₀-₉{}]/.test(m));", s, flags=re.M)
