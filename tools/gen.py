@@ -309,7 +309,8 @@ for ch in sorted(KEYS, key=lambda c: ORDER.index(c) if c in ORDER else 99):
 eme_rows = [[lat] + [[KEYS[ch][m] for ch in lat] for m in range(4)] for lat in EME_LAT]
 EME_EX = [KB_CUN[w] for w in ['lugal', 'e₂', 'ki-en-gi', 'dub-sar', 'dumu', 'nin', 'šu', 'a-ba-a'] if w in KB_CUN and all(c in EME_READ for c in KB_CUN[w])]
 if EME_MISS: print('EME: no single sign for', EME_MISS)
-js.append(f'const KB_EME = {json.dumps({"rows": eme_rows, "read": EME_READ, "ex": EME_EX}, ensure_ascii=False)};')
+EME_NUM = {num_sign(n): n for n in list(range(1, 11)) + [20, 30, 40, 50]}   # numeral sign -> value within one place
+js.append(f'const KB_EME = {json.dumps({"rows": eme_rows, "read": EME_READ, "ex": EME_EX, "num": EME_NUM}, ensure_ascii=False)};')
 js.append('// audio keys -> reconstructed reading (for tools/texts.js)')
 js.append(f'const AUDIO = {json.dumps(AUDIO, ensure_ascii=False)};')
 open('data.js', 'w', encoding='utf8').write('\n'.join(js) + '\n')

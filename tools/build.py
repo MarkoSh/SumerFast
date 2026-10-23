@@ -47,6 +47,13 @@ const atfKeys = s => s.replace(/[áéíúàèìù]/g, c => KB_ACC[c]).replace(/�
   .replace(/[ĝŋ]/g, 'j').replace(/[ĜŊ]/g, 'J').replace(/ḫ/g, 'h').replace(/Ḫ/g, 'H').replace(/[₀-₉]/g, c => '₀₁₂₃₄₅₆₇₈₉'.indexOf(c));
 // typed signs -> transliteration: signs of a word joined by hyphens
 const emeTr = v => v.split(/\s+/).filter(Boolean).map(w => [...w].map(c => KB_EME.read[c] || '?').join('-')).join(' ');
+// numbers are sexagesimal: each space-separated group of numeral signs is one place (0–59)
+const emeNum = v => {
+  const g = v.split(/\s+/).filter(Boolean).map(w => [...w].reduce((s, c) => s + (KB_EME.num[c] ?? NaN), 0));
+  if (!g.length || g.some(x => !(x <= 59))) return '';
+  const n = g.reduce((a, x) => a * 60 + x, 0);
+  return g.length < 2 ? `= ${n}` : g.map((x, i) => x + (g.length - 1 - i ? ` × ${60 ** (g.length - 1 - i)}` : '')).join(' + ') + ` = ${n}`;
+};
 const kbCun = c => c ? `<p class="mt-5 font-thai text-5xl text-white">${esc(c)}</p>` : '';
 const KB_SETS = [{
   name: ['ATF · латиница', 'ATF · Latin'], ph: 'kbPh', note: 'kbNote', ex: KB_EX,
@@ -65,7 +72,7 @@ const KB_SETS = [{
   rows: KB_EME.rows, hint: {},
   conv: s => s, keys: ch => [ch], read: ch => KB_EME.read[ch] || '',
   say: v => AUDIO[gender][emeTr(v)] ? emeTr(v) : '',
-  out: v => v ? `<p class="mt-4 font-mono text-lg text-accent">${esc(emeTr(v))}</p>` : '',
+  out: v => { const n = emeNum(v); return !v ? '' : n ? `<p class="mt-4 font-mono text-lg text-accent">${esc(n)}</p>` : `<p class="mt-4 font-mono text-lg text-accent">${esc(emeTr(v))}</p>` },
 }];
 """)
 
