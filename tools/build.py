@@ -5,6 +5,9 @@ HERE = os.path.dirname(os.path.abspath(__file__)) + '/'
 SRC = os.path.join(HERE, '../../ThaiFast/index.html')
 DST = os.path.join(HERE, '../index.html')
 s = open(SRC, encoding='utf8').read()
+# ThaiFast's Google Analytics tag belongs to ThaiFast only
+i = s.index('  <!-- Google tag (gtag.js) -->'); j = s.index('  </script>\n', i) + len('  </script>\n')
+s = s[:i] + s[j:]
 
 def rep(a, b, n=1):
     global s
