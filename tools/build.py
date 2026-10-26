@@ -315,7 +315,7 @@ rep("<p class=\"mt-2 font-mono text-accent\">${slots.map(s => s.lat).join(' ')}<
 rep("${lang === 'ru' ? `<p class=\"text-zinc-500\">${slots.map(s => s.cyr).join(' ')}</p>` : ''}", "${lang === 'ru' ? `<p class=\"text-zinc-500\">${SENT_BASES[stBase].texts[stType].cyr}</p>` : ''}")
 
 # dialogs = reading a tablet: options are translations (no audio), them = tablet line
-rep("const dlgYouSay = o => o.th + pt().th;", "const dlgYouSay = o => ''; // translations are not voiced")
+rep("const dlgYouSay = o => o.th + pt(o.th).th;", "const dlgYouSay = o => ''; // translations are not voiced")
 rep('<span class="block text-sm text-zinc-400">${o[lang]}</span></button>` }).join(\'\');', '<span class="block text-base text-white">${o[lang]}</span></button>` }).join(\'\');')
 
 rep("let ansCat = 'food';", "let ansCat = 'gods';")
