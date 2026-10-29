@@ -414,3 +414,7 @@ for bad in ['CONS', 'thaiNum', 'thaiDigits', 'VOWELS32', 'TONEMARKS', 'VSAY', 'P
         print('LEFTOVER', bad, [s[m.start() - 40:m.start() + 40] for m in re.finditer(re.escape(bad), s)][:2])
 open(DST, 'w', encoding='utf8').write(s)
 print('written', DST, len(s))
+
+# offline version: refresh offline.json (file list with content hashes) and sw.js from ThaiFast/tools
+import subprocess
+subprocess.run(['python3', os.path.join(HERE, '../../ThaiFast/tools/offline.py'), os.path.join(HERE, '..')], check=True)
