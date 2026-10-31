@@ -40,9 +40,9 @@ s = s.replace('ThaiFast', 'SumerFast')
 
 # no facts block for Sumerian (yet): drop it and keep the numbering
 between('  <!-- FACTS -->', '  <!-- LEARN -->', '')
-rep('<p class="font-mono text-sm text-accent">17</p>', '<p class="font-mono text-sm text-accent">15</p>')
+rep('<p class="font-mono text-sm text-accent">18</p>', '<p class="font-mono text-sm text-accent">15</p>')
 between('let factCat = ', 'function renderLearn() {', '')
-rep(' renderFacts(); renderStories();', '')
+rep(' renderFacts(); renderIdioms(); renderStories();', '')
 
 # keyboard block: ATF conventions instead of a national layout; cuneiform shown for words the course knows
 between('// Kedmanee, the standard Thai layout.', 'const KB_CODE =', r"""// No cuneiform layout exists. ATF: transliteration in Latin letters, as in ORACC and ETCSL.
