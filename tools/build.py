@@ -24,6 +24,8 @@ def between(a, b, new):
     i = s.index(a); j = s.index(b, i)
     s = s[:i] + new + s[j:]
 
+rep('<p class="font-mono text-sm text-accent">19</p>', '<p class="font-mono text-sm text-accent">16</p>')  # shadowing section number
+
 # ---------- head ----------
 rep('<title>ThaiFast — тайский с нуля</title>', '<title>SumerFast — шумерский язык и клинопись</title>')
 rep('content="Тайский язык с нуля: звуки, тоны, алфавит, цифры, нужные фразы и быстрые тренажёры."', 'content="Шумерский язык с нуля: клинопись, транслитерация, грамматика и строки с настоящих табличек. Sumerian from scratch: cuneiform, grammar and real tablets."')
