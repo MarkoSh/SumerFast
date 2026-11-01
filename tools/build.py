@@ -25,7 +25,7 @@ def between(a, b, new):
     s = s[:i] + new + s[j:]
 
 # no copybook for cuneiform yet: drop the print button and the pen-and-paper note
-s = re.sub(r'\n +<button id="trPrint".*?\n +<p [^\n]*data-i18n="trPrintHint"></p>', '', s, flags=re.S)
+s = re.sub(r'\n +<select id="trPrnSize".*?\n +<p [^\n]*data-i18n="trPrintHint"></p>', '', s, flags=re.S)
 s = re.sub(r'\n +<p class="mt-6 flex[^\n]*data-i18n="trNote"></span></p>', '', s)
 s = s.replace("$('#trPrint').onclick = trPrint;", '')
 
@@ -381,7 +381,9 @@ between('const TR_SETS = {', 'const TR_W = 340;', '''const TR_SETS = {
 ''')
 rep("const tr = { set: 'cons', size: 'm',", "const tr = { set: 'syl', size: 'm',")
 rep("const TR_STYLES = { hand: ['Playpen Sans Thai', 400] };", "const TR_STYLES = { cun: ['Noto Sans Cuneiform', 400] };")
-rep("tr.style = 'hand'; tr.slant = 0;", "tr.style = 'cun'; tr.slant = 0;")
+rep("tr.style = 'hand'; tr.slant = 8; // default lean like real handwriting", "tr.style = 'cun'; tr.slant = 0;")
+rep('id="trSlant" type="range" min="0" max="15" step="1" value="8"', 'id="trSlant" type="range" min="0" max="15" step="1" value="0"')
+rep('font-mono text-xs text-zinc-300">8°</span>', 'font-mono text-xs text-zinc-300">0°</span>')
 rep('class="leading-none">กขค</span>', 'class="leading-none">𒀭𒂗𒆠</span>')
 rep("xs: 'text-[7px]' }[k]}\">ก</span>", "xs: 'text-[7px]' }[k]}\">𒀭</span>")
 rep("document.fonts.load(trFontCss(100), 'กอ๑')", "document.fonts.load(trFontCss(100), '𒀭')")
