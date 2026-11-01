@@ -1756,7 +1756,7 @@ const TR_SIZES = { l: { k: .62, brush: 15, tol: 9 }, m: { k: .32, brush: 10, tol
 const TR_EV = 2; // masks are evaluated at 2× so thin strokes of the small sizes stay accurate
 const tr = { set: 'syl', size: 'm', i: 0, strokes: [], drawing: false, checked: false };
 const trSz = () => TR_SIZES[tr.size];
-// template styles: printed with loops + three handwriting fonts
+// template style: neat handwriting
 const TR_STYLES = { cun: ['Noto Sans Cuneiform', 400] };
 tr.style = 'cun'; tr.slant = 0;
 const trFontCss = fs => { const [fam, w] = TR_STYLES[tr.style]; return `${w} ${fs}px '${fam}'` };

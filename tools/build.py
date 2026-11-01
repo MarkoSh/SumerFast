@@ -380,12 +380,12 @@ between('const TR_SETS = {', 'const TR_W = 340;', '''const TR_SETS = {
 };
 ''')
 rep("const tr = { set: 'cons', size: 'm',", "const tr = { set: 'syl', size: 'm',")
-rep("const TR_STYLES = { loop: ['Noto Sans Thai Looped', 500], school: ['Mali', 500], hand: ['Sriracha', 400], cursive: ['Charm', 700] };", "const TR_STYLES = { cun: ['Noto Sans Cuneiform', 400] };")
-rep("tr.style = 'loop'; tr.slant = 0;", "tr.style = 'cun'; tr.slant = 0;")
+rep("const TR_STYLES = { hand: ['Playpen Sans Thai', 400] };", "const TR_STYLES = { cun: ['Noto Sans Cuneiform', 400] };")
+rep("tr.style = 'hand'; tr.slant = 0;", "tr.style = 'cun'; tr.slant = 0;")
 rep('class="leading-none">กขค</span>', 'class="leading-none">𒀭𒂗𒆠</span>')
 rep("xs: 'text-[7px]' }[k]}\">ก</span>", "xs: 'text-[7px]' }[k]}\">𒀭</span>")
 rep("document.fonts.load(trFontCss(100), 'กอ๑')", "document.fonts.load(trFontCss(100), '𒀭')")
-rep("""document.fonts?.load('500 100px "Noto Sans Thai Looped"', 'กอ๑')""", """document.fonts?.load("400 100px 'Noto Sans Cuneiform'", '𒀭')""")
+rep("""document.fonts?.load(trFontCss(100), 'กอ๑')""", """document.fonts?.load("400 100px 'Noto Sans Cuneiform'", '𒀭')""")
 
 rep("const normTh = s => s.replace(/[\\s.,!?ๆ]/g, '').replace(/ครับ|ค่ะ|คะ|นะ/g, '');", "const normTh = s => s.toLowerCase().replace(/[^a-z]/g, '');")
 rep("console.assert(simil('สวัสดีครับ', 'สวัสดี') === 1 && simil('ขอบคุณ', 'สวัสดี') < .5, 'simil');", "")
