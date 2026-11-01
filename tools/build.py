@@ -24,6 +24,11 @@ def between(a, b, new):
     i = s.index(a); j = s.index(b, i)
     s = s[:i] + new + s[j:]
 
+# no copybook for cuneiform yet: drop the print button and the pen-and-paper note
+s = re.sub(r'\n +<button id="trPrint".*?\n +<p [^\n]*data-i18n="trPrintHint"></p>', '', s, flags=re.S)
+s = re.sub(r'\n +<p class="mt-6 flex[^\n]*data-i18n="trNote"></span></p>', '', s)
+s = s.replace("$('#trPrint').onclick = trPrint;", '')
+
 # ---------- head ----------
 rep('<title>ThaiFast — тайский с нуля</title>', '<title>SumerFast — шумерский язык и клинопись</title>')
 rep('content="Тайский язык с нуля: звуки, тоны, алфавит, цифры, нужные фразы и быстрые тренажёры."', 'content="Шумерский язык с нуля: клинопись, транслитерация, грамматика и строки с настоящих табличек. Sumerian from scratch: cuneiform, grammar and real tablets."')

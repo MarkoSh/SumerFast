@@ -43,6 +43,19 @@ tailwind.config = {
   .face.back { transform: rotateY(180deg); }
   .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s, transform .7s cubic-bezier(.2,.8,.2,1); }
   .reveal.in { opacity: 1; transform: none; }
+  #prn { display: none }
+  @media print {
+    @page { size: A4; margin: 10mm }
+    body.printing > *:not(#prn) { display: none !important }
+    body.printing { background: #fff !important }
+    body.printing #prn { display: block; color: #000; font-family: Inter, sans-serif }
+    #prn .blk { break-inside: avoid; height: 88mm }
+    #prn .row { display: flex; height: 14mm; border-top: .2mm solid #aaa; border-bottom: .2mm solid #aaa; position: relative }
+    #prn .row::after { content: ''; position: absolute; left: 0; right: 0; top: 50%; border-top: .2mm dashed #ccc }
+    #prn .row + .row { border-top: 0 }
+    #prn .row b { flex: 1; display: grid; place-items: center; font-weight: 400; font-size: 9mm; line-height: 1; border-left: .2mm dotted #ccc }
+    #prn .row b:first-child { border-left: 0 }
+  }
   .tone-path { stroke-dasharray: 100; stroke-dashoffset: 100; transition: stroke-dashoffset .9s cubic-bezier(.2,.8,.2,1); }
   .reveal.in .tone-path, .tone-btn .tone-path { stroke-dashoffset: 0; }
   @keyframes shake { 20%,60% { transform: translateX(-6px) } 40%,80% { transform: translateX(6px) } }
@@ -590,7 +603,7 @@ tailwind.config = {
             <div>
               <div id="trInfo"></div>
               <div id="trResult" class="mt-6 min-h-[120px]"></div>
-              <p class="mt-6 flex items-start gap-2 text-xs text-zinc-500"><i data-lucide="info" class="w-3.5 h-3.5 shrink-0 mt-0.5"></i><span data-i18n="trTip"></span></p>
+              <p class="mt-4 flex items-start gap-2 text-xs text-zinc-500"><i data-lucide="info" class="w-3.5 h-3.5 shrink-0 mt-0.5"></i><span data-i18n="trTip"></span></p>
             </div>
           </div>
         </div>
@@ -1951,6 +1964,18 @@ $('#trClear').onclick = () => trGo(tr.i);
 $('#trCheck').onclick = trCheck;
 $('#trHide').onchange = () => { trRender(); icons() };
 $('#trProp').onchange = e => { tr.prop = e.target.checked; trGo(tr.i) };
+// printable copybook: one block per letter, 5 lines, the sample fades along each line (on screen it is hidden, the print CSS shows it)
+const PRN_FADE = [.75, .6, .45, .32, .2, .1, .05, 0, 0, 0];
+function trPrint() {
+  const [fam, w] = TR_STYLES[tr.style], sk = `transform:skewX(${-tr.slant}deg)`;
+  const line = g => `<div class="row">${PRN_FADE.map(o => `<b style="font-family:'${fam}';font-weight:${w}"><span style="opacity:${o};${sk}">${o ? g : ''}</span></b>`).join('')}</div>`;
+  const blk = x => `<section class="blk"><div style="display:flex;align-items:baseline;gap:4mm;margin-bottom:2mm"><span style="font:${w} 9mm '${fam}';${sk}">${x.g}</span><span style="font:600 4mm Inter">${x.lat}</span><span style="font:3.5mm Inter;color:#555">${L(x.ru, x.en)}</span></div>${line(x.g).repeat(5)}</section>`;
+  $('#prn').innerHTML = `<p style="font:3mm Inter;color:#555;margin:0 0 4mm"><b>${t('prnTitle')}.</b> ${t('prnHow')} ${t('trNote')}</p>` + trList().map(blk).join('');
+  document.body.classList.add('printing');
+  addEventListener('afterprint', () => document.body.classList.remove('printing'), { once: true });
+  document.fonts.load(`${w} 40px '${fam}'`, 'กอ๑').finally(() => print());
+}
+
 document.fonts?.load("400 100px 'Noto Sans Cuneiform'", '𒀭').then(() => tr.checked ? trCheck() : trRedraw());
 
 /* listening */
@@ -2322,5 +2347,6 @@ if ('serviceWorker' in navigator && location.protocol !== 'file:') {
   });
 }
 </script>
+<div id="prn"></div>
 </body>
 </html>
