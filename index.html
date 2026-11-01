@@ -595,10 +595,14 @@ tailwind.config = {
                 <button id="trNext" class="rounded-xl border border-white/10 py-2.5 hover:bg-white/5 transition grid place-items-center" aria-label="Next"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
               </div>
               <button id="trCheck" class="mt-2 w-full rounded-xl bg-accent text-ink-950 py-3 font-semibold hover:brightness-110 transition flex items-center justify-center gap-2"><i data-lucide="scan-eye" class="w-4 h-4"></i><span data-i18n="trCheck"></span></button>
+              <select id="trPrnSize" class="mt-2 w-full rounded-xl border border-white/10 bg-ink-900 py-2 px-3 text-sm text-zinc-300"></select>
+              <button id="trPrint" class="mt-2 w-full rounded-xl border border-white/10 py-2.5 text-sm text-zinc-300 hover:bg-white/5 transition flex items-center justify-center gap-2"><i data-lucide="printer" class="w-4 h-4"></i><span data-i18n="trPrint"></span></button>
+              <p class="mt-2 text-xs text-zinc-500" data-i18n="trPrintHint"></p>
             </div>
             <div>
               <div id="trInfo"></div>
               <div id="trResult" class="mt-6 min-h-[120px]"></div>
+              <p class="mt-6 flex items-start gap-2 rounded-xl border border-accent/30 bg-accent/5 p-3 text-sm text-zinc-300"><i data-lucide="pen-tool" class="w-4 h-4 shrink-0 mt-0.5 text-accent"></i><span data-i18n="trNote"></span></p>
               <p class="mt-4 flex items-start gap-2 text-xs text-zinc-500"><i data-lucide="info" class="w-3.5 h-3.5 shrink-0 mt-0.5"></i><span data-i18n="trTip"></span></p>
             </div>
           </div>
@@ -808,6 +812,10 @@ const T = {
     trEmpty: 'Сначала поставьте клинья', trCover: 'Обведено', trPrec: 'Точность',
     trR0: 'Ещё разок', trR1: 'Неплохо', trR2: 'Хорошо', trR3: 'Отлично!',
     trLegend: 'Зелёный — попали, красный — пропустили, оранжевый — мимо линий.',
+    trPrint: 'Прописи для печати', trPrintHint: 'Лист на каждый знак выбранного набора. В окне печати выберите «Сохранить как PDF» или принтер (A4, масштаб 100%).',
+    trNote: 'Если знак не выводится строго по нарисованному — возможно, дело в неточности ввода вашего устройства. Калибровка экрана или стилуса может помочь, но лишь временно или не так, как хотелось бы. Поэтому обязательно тренируйте письмо на бумаге ручкой или карандашом: клинья можно чиркать штрихом с утолщением в начале — это и есть «головка» клина.',
+    prnS_l: 'Крупно', prnS_m: 'Обычно', prnS_s: 'Мелко', prnMm: 'мм', prnDec: ',', prnSize: 'Высота знака — {mm} мм, от верхней линии до сплошной. Проверьте масштаб при печати: эта полоска должна быть',
+    prnTitle: 'Прописи клинописных знаков', prnHow: 'Обведите первые знаки в строке, затем пишите поверх — образец светлеет с каждым знаком. В конце строки пишите сами.',
     trTip: 'Писцы не рисовали линии, а вдавливали в сырую глину трёхгранную палочку: углом — головка клина, ребром — хвост. Порядок: слева направо, сначала горизонтальные клинья, потом вертикальные.',
     kbTitle: 'Как набрать по-шумерски', kbSub: 'Стандартной раскладки для клинописи не существует. Учёные печатают транслитерацию латиницей — это вкладка ATF. А во вкладке EME — наша собственная клинописная раскладка: на клавишах сразу знаки.',
     kbPh: 'Например, lugal или e2', kbShow: 'Показать', kbHow: 'Порядок нажатий', kbEmpty: 'Выберите слово выше или начните печатать',
@@ -906,6 +914,10 @@ const T = {
     trEmpty: 'Press some wedges first', trCover: 'Covered', trPrec: 'Accuracy',
     trR0: 'Try again', trR1: 'Not bad', trR2: 'Good', trR3: 'Excellent!',
     trLegend: 'Green — hit, red — missed, orange — off the lines.',
+    trPrint: 'Printable copybook', trPrintHint: 'One sheet per sign of the chosen set. In the print dialog pick “Save as PDF” or a printer (A4, 100% scale).',
+    trNote: 'If a sign will not come out exactly along the drawn one, it may be your device’s input imprecision. Calibrating the screen or stylus can help, but only temporarily or not as much as you would like. So always practise on paper with a pen or pencil: draw each wedge as a stroke thicker at the start — that thick start is the wedge head.',
+    prnS_l: 'Large', prnS_m: 'Regular', prnS_s: 'Small', prnMm: 'mm', prnDec: '.', prnSize: 'Sign height: {mm} mm, from the top line to the solid one. Check the print scale: this bar should be',
+    prnTitle: 'Cuneiform sign copybook', prnHow: 'Trace the first signs in each line, then write over them — the sample gets lighter with every sign. Write the rest of the line yourself.',
     trTip: 'Scribes didn’t draw lines — they pressed a three-sided reed into wet clay: the corner makes the head, the edge the tail. Order: left to right, horizontal wedges first, then vertical.',
     kbTitle: 'How to type Sumerian', kbSub: 'No cuneiform keyboard layout exists. Scholars type the transliteration in Latin letters: that is the ATF tab. The EME tab is our own cuneiform layout, with the signs right on the keys.',
     kbPh: 'For example, lugal or e2', kbShow: 'Show', kbHow: 'Key order', kbEmpty: 'Pick a word above or start typing',
@@ -1967,8 +1979,8 @@ $('#trProp').onchange = e => { tr.prop = e.target.checked; trGo(tr.i) };
 // The font is scaled so the body glyph PRN_BODY is exactly that tall, so the printed size does not depend on the font.
 // ponytail: body heights are typical school/adult handwriting values, not a national standard — adjust PRN_SIZES to taste.
 const PRN_FADE = [.75, .6, .45, .32, .2, .1, .05, 0, 0, 0];
-const PRN_BODY = 'ก', PRN_UP = 1, PRN_DOWN = .9;
-const PRN_SIZES = { l: { body: 6, rows: 4 }, m: { body: 4.5, rows: 5 }, s: { body: 3.5, rows: 6 } };
+const PRN_BODY = '𒀭', PRN_UP = .12, PRN_DOWN = .12;
+const PRN_SIZES = { l: { body: 12, rows: 5 }, m: { body: 9, rows: 6 }, s: { body: 7, rows: 8 } };
 const PRN_W = 190;
 function trPrint() {
   const [fam, w] = TR_STYLES[tr.style], { body, rows } = PRN_SIZES[$('#trPrnSize').value];
@@ -1987,7 +1999,7 @@ function trPrint() {
   addEventListener('afterprint', () => document.body.classList.remove('printing'), { once: true });
   document.fonts.load(`${w} 40px '${fam}'`, 'กอ๑').finally(() => print());
 }
-
+$('#trPrint').onclick = trPrint;
 document.fonts?.load("400 100px 'Noto Sans Cuneiform'", '𒀭').then(() => tr.checked ? trCheck() : trRedraw());
 
 /* listening */

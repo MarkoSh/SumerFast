@@ -24,11 +24,6 @@ def between(a, b, new):
     i = s.index(a); j = s.index(b, i)
     s = s[:i] + new + s[j:]
 
-# no copybook for cuneiform yet: drop the print button and the pen-and-paper note
-s = re.sub(r'\n +<select id="trPrnSize".*?\n +<p [^\n]*data-i18n="trPrintHint"></p>', '', s, flags=re.S)
-s = re.sub(r'\n +<p class="mt-6 flex[^\n]*data-i18n="trNote"></span></p>', '', s)
-s = s.replace("$('#trPrint').onclick = trPrint;", '')
-
 # ---------- head ----------
 rep('<title>ThaiFast — тайский с нуля</title>', '<title>SumerFast — шумерский язык и клинопись</title>')
 rep('content="Тайский язык с нуля: звуки, тоны, алфавит, цифры, нужные фразы и быстрые тренажёры."', 'content="Шумерский язык с нуля: клинопись, транслитерация, грамматика и строки с настоящих табличек. Sumerian from scratch: cuneiform, grammar and real tablets."')
@@ -393,6 +388,10 @@ rep("const normTh = s => s.replace(/[\\s.,!?ๆ]/g, '').replace(/ครับ|�
 rep("console.assert(simil('สวัสดีครับ', 'สวัสดี') === 1 && simil('ขอบคุณ', 'สวัสดี') < .5, 'simil');", "")
 
 rep("const SITE = 'thai';", "const SITE = 'sumer';")
+
+# copybook: a sign is a roughly square block, no ascender/descender zones, bigger sizes than for letters
+rep("const PRN_BODY = 'ก', PRN_UP = 1, PRN_DOWN = .9;", "const PRN_BODY = '𒀭', PRN_UP = .12, PRN_DOWN = .12;")
+rep("{ l: { body: 6, rows: 4 }, m: { body: 4.5, rows: 5 }, s: { body: 3.5, rows: 6 } }", "{ l: { body: 12, rows: 5 }, m: { body: 9, rows: 6 }, s: { body: 7, rows: 8 } }")
 
 # trace: cuneiform is impressed, not drawn — each stroke becomes a wedge (head where you press, tail towards release)
 func('trInk', r"""
