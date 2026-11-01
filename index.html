@@ -2204,7 +2204,7 @@ const shSave = () => store.set(SH_KEY, JSON.stringify({ rate: sh.rate, reps: sh.
 const shCur = () => sh.list[sh.ord[sh.k]];
 function shBuild() {
   if (sh.src !== 'all' && !POOLS[sh.src]) sh.src = Object.keys(POOLS)[0];
-  sh.list = sh.src === 'all' ? Object.values(POOLS).flat() : POOLS[sh.src];
+  sh.list = (sh.src === 'all' ? Object.values(POOLS).flat() : POOLS[sh.src]).map(x => typeof swapVoice === 'function' ? swapVoice(x, gender) : x); // swapVoice exists on SumerFast only
   sh.ord = sh.list.map((_, i) => i);
   if (sh.shuffle) sh.ord = shuffle(sh.ord);
   sh.k = 0; sh.n = 0;
