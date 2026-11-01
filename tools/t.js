@@ -1,3 +1,4 @@
+// SumerFast UI text (T, RU/EN). gen.py pastes this file into data.js as is.
 /* ================= UI TEXT ================= */
 const T = {
   ru: {

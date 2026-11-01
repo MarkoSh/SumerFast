@@ -96,7 +96,7 @@ def num_name_parts(n):
     if t: p.append(NN[t * 10])
     if o: p.append(NN[o])
     return p
-for w in set(NN.values()): audio(w, w)
+for w in dict.fromkeys(NN.values()): audio(w, w)
 out['NUM'] = [dict(item(NN[k]), th=(num_sign(k) if k < 60 else SIGNS[INDEX['1(geš₂)']]['utf8']), ru=str(k), en=str(k)) for k in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 30, 40, 50, 60]]
 for x in out['NUM']: audio(x['th'], x['lat'])
 out['NUM_SIGN'] = {str(n): num_sign(n) for n in range(1, 60)}
