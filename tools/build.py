@@ -420,6 +420,12 @@ function trInk(ctx, color, width) {
   }
 }""")
 
+# the Thai pronouns tab (ThaiFast only)
+s = re.sub(r'          <button data-vtab="pron".*?</button>\n', '', s, count=1)
+s = re.sub(r'      <!-- Pronouns -->.*?(?=\n      <!-- )', '', s, count=1, flags=re.S)
+if ' renderPron();' in s: s = s.replace(' renderPron();', '', 1)
+if 'function renderPron() {' in s: between('function renderPron() {', 'function renderBody() {', '')
+
 for bad in ['CONS', 'thaiNum', 'thaiDigits', 'VOWELS32', 'TONEMARKS', 'VSAY', 'PRONOUN', 'INI[', 'FIN[', 'TONES[', 'orderPhrase(', 'ปวด', 'ไ', 'ก', 'ครับ']:
     if bad in s:
         print('LEFTOVER', bad, [s[m.start() - 40:m.start() + 40] for m in re.finditer(re.escape(bad), s)][:2])
